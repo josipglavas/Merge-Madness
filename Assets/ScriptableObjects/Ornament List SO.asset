@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a93ae5cfe04d77647ac7773b0cfcf212, type: 3}
+  m_Name: Ornament List SO
+  m_EditorClassIdentifier: 
+  OrnamentList:
+  - prefab: {fileID: 14691747018466965, guid: 8cd4ca7c7adfd405cb218f167b6128fc, type: 3}
+    score: 1
+  - prefab: {fileID: 14691747018466965, guid: e4639de1456584b92bdfa287ce51f4f1, type: 3}
+    score: 3
+  - prefab: {fileID: 14691747018466965, guid: 3b0d6dec5a50c4bfb9d064cd255cb39a, type: 3}
+    score: 6
+  - prefab: {fileID: 14691747018466965, guid: c1bae4ecf1db44cc4b0f8431a55f11d6, type: 3}
+    score: 12
+  - prefab: {fileID: 14691747018466965, guid: cae7e89660b1a42faa420f6954ac03a4, type: 3}
+    score: 18
+  - prefab: {fileID: 14691747018466965, guid: a0e7dd8c43f1b46da96b1c26741720fe, type: 3}
+    score: 25
+  - prefab: {fileID: 14691747018466965, guid: dfc22aa8e52da443f8b37595246adc2b, type: 3}
+    score: 35
+  - prefab: {fileID: 14691747018466965, guid: 2fff9319b40d749098d33f07fb47d6fa, type: 3}
+    score: 50
+  - prefab: {fileID: 14691747018466965, guid: 33313c70520d548819b00b089fed1825, type: 3}
+    score: 90
+  - prefab: {fileID: 14691747018466965, guid: bcf3ff06489ab47ba9f84b86132ef4b7, type: 3}
+    score: 150
+  - prefab: {fileID: 14691747018466965, guid: 7dd093223ad63498484eed50ff3a83d2, type: 3}
+    score: 215
+  - prefab: {fileID: 14691747018466965, guid: 0d87f55a243ec4618ab9e601b144d9d4, type: 3}
+    score: 300
+  - prefab: {fileID: 14691747018466965, guid: 308c8746e059d43eaa0722c90aa2433f, type: 3}
+    score: 500
+  - prefab: {fileID: 14691747018466965, guid: e848c5af21d10411ca0d6342e12cc6a5, type: 3}
+    score: 1000
