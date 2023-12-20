@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour {
         leftBoundary.position = CalculateBoundaryPosition(Screen.safeArea.xMin, 0, -leftBoundary.GetComponent<BoxCollider2D>().size.x * 0.5f);
         rightBoundary.position = CalculateBoundaryPosition(Screen.safeArea.xMax, 0, rightBoundary.GetComponent<BoxCollider2D>().size.x * 0.5f);
         bottomBoundary.position = CalculateBoundaryPosition(0, Screen.safeArea.yMin, -bottomBoundary.GetComponent<BoxCollider2D>().size.y * 0.32f);
-        topBoundary.position = CalculateBoundaryPosition(0, Screen.safeArea.yMax - 0.1f, 0);
+        topBoundary.position = CalculateBoundaryPosition(0, Screen.safeArea.yMax - 80f, 0);
         SetDeathLinePosition(topBoundary.gameObject);
     }
     private Vector3 CalculateBoundaryPosition(float x, float y, float offset) {

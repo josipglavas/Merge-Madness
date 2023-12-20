@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1055653333287391724}
   m_Layer: 0
   m_Name: Ornament
-  m_TagString: Untagged
+  m_TagString: Ornament
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 1055653335018102993}
   m_Layer: 0
   m_Name: Visual
-  m_TagString: Untagged
+  m_TagString: Ornament
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
