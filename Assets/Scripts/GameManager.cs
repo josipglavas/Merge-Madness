@@ -17,14 +17,17 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private Transform topBoundary;
     [SerializeField] private GameObject deathLine;
 
+    [SerializeField] private GameObject universalObject;
+
+    public bool IsGameRunning { get; private set; }
     private bool hasMerged = false;
     public bool CanPlace = true;
     public bool IsGamePaused = false;
     private int totalScore = 0;
     private GameObject nextOrnamentToSpawn;
     private GameObject currentOrnament;
-    public bool IsGameRunning { get; private set; }
     private Vector3 lastPos = Vector3.zero;
+
     private void Awake() {
         Instance = this;
         Application.targetFrameRate = 60;
@@ -58,16 +61,16 @@ public class GameManager : MonoBehaviour {
             Destroy(Ornament1.gameObject);
             Destroy(Ornament2.gameObject);
             GameObject selectedOrnament = null;
-            if (Ornament1.ornamentSize + 1 < ornamentList.OrnamentList.Count) {
-                selectedOrnament = ornamentList.OrnamentList[Ornament1.ornamentSize + 1].prefab;
+            if (Ornament2.ornamentSize + 1 < ornamentList.OrnamentList.Count) {
+                selectedOrnament = ornamentList.OrnamentList[Ornament2.ornamentSize + 1].prefab;
             }
             if (selectedOrnament != null) {
-                Instantiate(selectedOrnament, Ornament1.transform.position, Quaternion.identity);
+                Instantiate(selectedOrnament, Ornament2.transform.position, Quaternion.identity);
             }
-            PlayParticles(Ornament1.transform);
+            PlayParticles(Ornament2.transform);
             hasMerged = true;
             AudioManager.Instance.PlayConnectOrnamentSound();
-            totalScore += ornamentList.OrnamentList[Ornament1.ornamentSize].score;
+            totalScore += ornamentList.OrnamentList[Ornament2.ornamentSize].score;
             OnScoreChanged?.Invoke(this, totalScore);
         }
         StartCoroutine(ResetHasMergedFlag());
@@ -139,6 +142,23 @@ public class GameManager : MonoBehaviour {
         CanPlace = true;
         PrepareNextOrnament();
     }
+
+    public void SpawnUniversalObject() {
+        Vector3 pos;
+        if (lastPos == Vector3.zero) {
+            float aboveDeathLine = 0.478f;
+            pos = deathLine.transform.position + new Vector3(0f, aboveDeathLine, 0f);
+        } else {
+            pos = lastPos;
+        }
+        Destroy(currentOrnament);
+        currentOrnament = Instantiate(universalObject, pos, Quaternion.identity);
+
+        currentOrnament.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        currentOrnament.GetComponent<Ornament>().enabled = false;
+        currentOrnament.GetComponentInChildren<Collider2D>().enabled = false;
+    }
+
     private void SetupBoundaries() {
         leftBoundary.position = CalculateBoundaryPosition(Screen.safeArea.xMin, 0, -leftBoundary.GetComponent<BoxCollider2D>().size.x * 0.5f);
         rightBoundary.position = CalculateBoundaryPosition(Screen.safeArea.xMax, 0, rightBoundary.GetComponent<BoxCollider2D>().size.x * 0.5f);
