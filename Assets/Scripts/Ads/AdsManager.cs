@@ -15,11 +15,10 @@ public class AdsManager : MonoBehaviour {
         IronSource.Agent.validateIntegration();
         //IronSource.Agent.init(appKey);
         GameManager.Instance.OnIsGameRunningChanged += GameManager_OnIsGameRunningChanged;
-        LoadRewarded();
     }
 
     private void GameManager_OnIsGameRunningChanged(object sender, System.EventArgs e) {
-        LoadInterstitial();
+        ShowInterstitial();
     }
 
     private void OnEnable() {
@@ -85,7 +84,8 @@ public class AdsManager : MonoBehaviour {
     private void SdkInitialized() {
         Debug.Log("Sdk initialized!");
         LoadBanner();
-
+        LoadInterstitial();
+        LoadRewarded();
     }
     private void OnApplicationPause(bool isPaused) {
         IronSource.Agent.onApplicationPause(isPaused);
@@ -133,10 +133,10 @@ public class AdsManager : MonoBehaviour {
 
     #region interstitial
 
-    public void LoadInterstitial() {
+    private void LoadInterstitial() {
         IronSource.Agent.loadInterstitial();
     }
-    public void ShowInterstitial() {
+    private void ShowInterstitial() {
         if (IronSource.Agent.isInterstitialReady()) {
             IronSource.Agent.showInterstitial();
         } else {
@@ -148,7 +148,7 @@ public class AdsManager : MonoBehaviour {
     /************* Interstitial AdInfo Delegates *************/
     // Invoked when the interstitial ad was loaded succesfully.
     private void InterstitialOnAdReadyEvent(IronSourceAdInfo adInfo) {
-        ShowInterstitial();
+
     }
     // Invoked when the initialization process has failed.
     private void InterstitialOnAdLoadFailed(IronSourceError ironSourceError) {
@@ -177,7 +177,7 @@ public class AdsManager : MonoBehaviour {
 
     private void LoadRewarded() {
 #if DEBUG
-        GameManager.Instance.SpawnUniversalObject();
+        //GameManager.Instance.SpawnUniversalObject();
 #endif
         IronSource.Agent.loadRewardedVideo();
         Debug.Log("rewarded ad ready!");

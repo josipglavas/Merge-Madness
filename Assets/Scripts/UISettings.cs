@@ -24,8 +24,8 @@ public class UISettings : MonoBehaviour {
     [SerializeField] private Sprite noteOff;
     [SerializeField] private TextMeshProUGUI highestScoreText;
 
-    private float lastGameplayMusicVolume = 1f;
-    private float lastSFXVolume = 1f;
+    private float lastGameplayMusicVolume;
+    private float lastSFXVolume;
     private bool gameplayMusicPlaying = true;
     private bool sfxPlaying = true;
     private const string url = "https://mergemadness.josipglavas.com/privacy";
@@ -81,6 +81,9 @@ public class UISettings : MonoBehaviour {
 
     private void Start() {
         HideSettings();
+        SetSFXVolume(FileManager.Instance.SfxVolume, false);
+        SetGameplayMusicVolume(FileManager.Instance.MusicVolume, false);
+
         highestScoreText.text = FileManager.Instance.Score.ToString();
     }
 
@@ -103,7 +106,7 @@ public class UISettings : MonoBehaviour {
 
     }
 
-    private void SetGameplayMusicVolume(float volume) {
+    private void SetGameplayMusicVolume(float volume, bool save = true) {
         AudioManager.Instance.SetGameplayMusicVolume(volume);
         gameplayMusicSlider.value = volume;
         if (volume == 0.0f) {
@@ -112,9 +115,11 @@ public class UISettings : MonoBehaviour {
             gameplayMusicSpeakerImage.sprite = noteOn;
             lastGameplayMusicVolume = volume;
         }
+        if (save)
+            FileManager.Instance.SetMusicVolume(volume);
     }
 
-    private void SetSFXVolume(float volume) {
+    private void SetSFXVolume(float volume, bool save = true) {
         AudioManager.Instance.SetSFXVolume(volume);
         sfxSlider.value = volume;
         if (volume == 0.0f) {
@@ -123,6 +128,8 @@ public class UISettings : MonoBehaviour {
             sfxSpeakerImage.sprite = speakerOn;
             lastSFXVolume = volume;
         }
+        if (save)
+            FileManager.Instance.SetSfxVolume(volume);
     }
 
     private void ShowPrivacyPolicy() {

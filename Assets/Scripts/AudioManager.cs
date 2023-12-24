@@ -40,7 +40,7 @@ public class AudioManager : MonoBehaviour {
     }
 
     public void SetGameplayMusicVolume(float volume) {
-        gameplaySource.volume = volume * 0.4f; // we are multiplying by 0.4f because we dont want the sound to be too loud.
+        gameplaySource.volume = volume * 0.35f; // we are multiplying by 0.35f because we dont want the sound to be too loud.
     }
 
     public void SetSFXVolume(float volume) {

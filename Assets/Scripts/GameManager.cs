@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
 
     private void Awake() {
         Instance = this;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 120;
     }
 
     private void Instance_OnCanUseInputChanged(object sender, bool canUseInput) {
@@ -65,9 +65,9 @@ public class GameManager : MonoBehaviour {
                 selectedOrnament = ornamentList.OrnamentList[Ornament2.ornamentSize + 1].prefab;
             }
             if (selectedOrnament != null) {
-                Instantiate(selectedOrnament, Ornament2.transform.position, Quaternion.identity);
+                Instantiate(selectedOrnament, Ornament1.transform.position, Quaternion.identity);
             }
-            PlayParticles(Ornament2.transform);
+            PlayParticles(Ornament1.transform);
             hasMerged = true;
             AudioManager.Instance.PlayConnectOrnamentSound();
             totalScore += ornamentList.OrnamentList[Ornament2.ornamentSize].score;
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator ResetCanPlace() {
         CanPlace = false;
-        yield return new WaitForSeconds(0.45f);
+        yield return new WaitForSeconds(0.475f);
         CanPlace = true;
         PrepareNextOrnament();
     }
