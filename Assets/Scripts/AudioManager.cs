@@ -45,5 +45,14 @@ public class AudioManager : MonoBehaviour {
 
     public void SetSFXVolume(float volume) {
         dropSource.volume = volume;
+        connectSource.volume = volume;
+    }
+
+    public float GetSFXVolume() {
+        return dropSource.volume;
+    }
+
+    public float GetMusicVolume() {
+        return gameplaySource.volume;
     }
 }

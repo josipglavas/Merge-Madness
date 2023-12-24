@@ -24,8 +24,8 @@ public class UISettings : MonoBehaviour {
     [SerializeField] private Sprite noteOff;
     [SerializeField] private TextMeshProUGUI highestScoreText;
 
-    private float lastGameplayMusicVolume;
-    private float lastSFXVolume;
+    private float lastGameplayMusicVolume = 0.5f;
+    private float lastSFXVolume = 1.0f;
     private bool gameplayMusicPlaying = true;
     private bool sfxPlaying = true;
     private const string url = "https://mergemadness.josipglavas.com/privacy";
@@ -41,7 +41,7 @@ public class UISettings : MonoBehaviour {
         });
 
         gameplayMusicButton.onClick.AddListener(() => {
-            if (gameplayMusicPlaying) {
+            if (gameplayMusicPlaying && AudioManager.Instance.GetMusicVolume() > 0.0f) {
                 SetGameplayMusicVolume(0.0f);
                 gameplayMusicPlaying = false;
             } else {
@@ -51,7 +51,7 @@ public class UISettings : MonoBehaviour {
         });
 
         sfxButton.onClick.AddListener(() => {
-            if (sfxPlaying) {
+            if (sfxPlaying && AudioManager.Instance.GetSFXVolume() > 0.0f) {
                 SetSFXVolume(0.0f);
                 sfxPlaying = false;
             } else {
