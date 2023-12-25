@@ -94,7 +94,7 @@ public class AdsManager : MonoBehaviour {
     #region banner
     public void LoadBanner() {
         Debug.Log("Banner loaded");
-        IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
+        IronSource.Agent.loadBanner(IronSourceBannerSize.SMART, IronSourceBannerPosition.BOTTOM);
     }
     public void DestroyBanner() {
         IronSource.Agent.destroyBanner();
@@ -210,6 +210,7 @@ public class AdsManager : MonoBehaviour {
     }
     // The Rewarded Video ad view is about to be closed. Your activity will regain its focus.
     private void RewardedVideoOnAdClosedEvent(IronSourceAdInfo adInfo) {
+        GameManager.Instance.SetIsGamePaused(false);
     }
     // The user completed to watch the video, and should be rewarded.
     // The placement parameter will include the reward data.
@@ -218,7 +219,6 @@ public class AdsManager : MonoBehaviour {
         //create universal object
         GameManager.Instance.SpawnUniversalObject();
         GameManager.Instance.SetIsGamePaused(false);
-
     }
     // The rewarded video ad was failed to show.
     private void RewardedVideoOnAdShowFailedEvent(IronSourceError error, IronSourceAdInfo adInfo) {
