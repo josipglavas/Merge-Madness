@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AdsManager : MonoBehaviour {
 #if UNITY_ANDROID
@@ -11,10 +12,25 @@ public class AdsManager : MonoBehaviour {
     private string appKey = "unexpected_platform";
 #endif
 
+    [SerializeField] private Button rewardAdButton;
+
+    private enum AdType {
+        Banner,
+        Interstitial,
+        Rewarded,
+    }
+
+    private void Awake() {
+        rewardAdButton.onClick.AddListener(() => {
+            ShowRewarded();
+        });
+    }
+
     private void Start() {
         IronSource.Agent.validateIntegration();
         //IronSource.Agent.init(appKey);
         GameManager.Instance.OnIsGameRunningChanged += GameManager_OnIsGameRunningChanged;
+        rewardAdButton.gameObject.SetActive(false);
     }
 
     private void GameManager_OnIsGameRunningChanged(object sender, System.EventArgs e) {
@@ -96,7 +112,7 @@ public class AdsManager : MonoBehaviour {
         Debug.Log("Banner loaded");
         IronSource.Agent.loadBanner(IronSourceBannerSize.SMART, IronSourceBannerPosition.BOTTOM);
     }
-    public void DestroyBanner() {
+    private void DestroyBanner() {
         IronSource.Agent.destroyBanner();
     }
 
@@ -108,7 +124,7 @@ public class AdsManager : MonoBehaviour {
     //Invoked when the banner loading process has failed.
     private void BannerOnAdLoadFailedEvent(IronSourceError ironSourceError) {
         Debug.Log($"Banner failed to load with error: {ironSourceError}");
-        StartCoroutine(RetryLoadingBannerAd());
+        StartCoroutine(RetryLoadingAd(AdType.Banner));
     }
     // Invoked when end user clicks on the banner ad
     private void BannerOnAdClickedEvent(IronSourceAdInfo adInfo) {
@@ -123,10 +139,21 @@ public class AdsManager : MonoBehaviour {
     private void BannerOnAdLeftApplicationEvent(IronSourceAdInfo adInfo) {
     }
 
-    private IEnumerator RetryLoadingBannerAd() {
-        yield return new WaitForSeconds(21f);
-        DestroyBanner();
-        IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
+    private IEnumerator RetryLoadingAd(AdType adType) {
+        yield return new WaitForSeconds(5f);
+        switch (adType) {
+            case AdType.Banner:
+                DestroyBanner();
+                IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
+                break;
+            case AdType.Interstitial:
+                IronSource.Agent.loadInterstitial();
+                break;
+
+            case AdType.Rewarded:
+                IronSource.Agent.loadRewardedVideo();
+                break;
+        }
     }
 
     #endregion
@@ -153,6 +180,7 @@ public class AdsManager : MonoBehaviour {
     // Invoked when the initialization process has failed.
     private void InterstitialOnAdLoadFailed(IronSourceError ironSourceError) {
         Debug.Log($"interstitial failed to load with error: {ironSourceError}");
+        StartCoroutine(RetryLoadingAd(AdType.Interstitial));
     }
     // Invoked when the Interstitial Ad Unit has opened. This is the impression indication. 
     private void InterstitialOnAdOpenedEvent(IronSourceAdInfo adInfo) {
@@ -180,10 +208,11 @@ public class AdsManager : MonoBehaviour {
         //GameManager.Instance.SpawnUniversalObject();
 #endif
         IronSource.Agent.loadRewardedVideo();
+
         Debug.Log("rewarded ad ready!");
     }
 
-    public void ShowRewarded() {
+    private void ShowRewarded() {
         if (IronSource.Agent.isRewardedVideoAvailable()) {
             IronSource.Agent.showRewardedVideo();
             GameManager.Instance.SetIsGamePaused(true);
@@ -199,11 +228,14 @@ public class AdsManager : MonoBehaviour {
     // The adInfo object includes information about the ad that was loaded successfully
     // This replaces the RewardedVideoAvailabilityChangedEvent(true) event
     private void RewardedVideoOnAdAvailable(IronSourceAdInfo adInfo) {
+        rewardAdButton.gameObject.SetActive(true);
     }
     // Indicates that no ads are available to be displayed
     // This replaces the RewardedVideoAvailabilityChangedEvent(false) event
     private void RewardedVideoOnAdUnavailable() {
         GameManager.Instance.SetIsGamePaused(false);
+        rewardAdButton.gameObject.SetActive(false);
+        StartCoroutine(RetryLoadingAd(AdType.Rewarded));
     }
     // The Rewarded Video ad view has opened. Your activity will loose focus.
     private void RewardedVideoOnAdOpenedEvent(IronSourceAdInfo adInfo) {

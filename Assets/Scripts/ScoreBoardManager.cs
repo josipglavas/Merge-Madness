@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SocialPlatforms;
 
-public class GameCenterManager : MonoBehaviour {
+public class ScoreBoardManager : MonoBehaviour {
 
-    public static GameCenterManager Instance { get; private set; }
+    public static ScoreBoardManager Instance { get; private set; }
 
     [SerializeField] private Button showLeaderBoardButton;
 

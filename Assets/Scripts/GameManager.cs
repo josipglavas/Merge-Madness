@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour {
     public void GameOver() {
         if (!IsGameRunning)
             return;
-        GameCenterManager.Instance.ReportScore(totalScore);
+        ScoreBoardManager.Instance.ReportScore(totalScore);
         FileManager.Instance.SetScore(totalScore);
         IsGameRunning = false;
         OnIsGameRunningChanged?.Invoke(this, EventArgs.Empty);
