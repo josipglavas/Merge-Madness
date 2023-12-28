@@ -3796,6 +3796,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d2d9a38b6b626479ff56baea018932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bannerId: ca-app-pub-4846032734396794/8109113206
+  interId: ca-app-pub-4846032734396794/4277663493
+  rewardedId: ca-app-pub-4846032734396794/2964581827
   rewardAdButton: {fileID: 1798647426}
 --- !u!1 &1432494475
 GameObject:
