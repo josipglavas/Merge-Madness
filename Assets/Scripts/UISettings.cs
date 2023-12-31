@@ -29,7 +29,7 @@ public class UISettings : MonoBehaviour {
     private bool gameplayMusicPlaying = true;
     private bool sfxPlaying = true;
     private const string url = "https://mergemadness.josipglavas.com/privacy";
-
+    private bool isSettingsShowing;
 
     private void Awake() {
         showSettingsButton.onClick.AddListener(() => {
@@ -87,12 +87,28 @@ public class UISettings : MonoBehaviour {
         highestScoreText.text = FileManager.Instance.Score.ToString();
     }
 
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.Joystick1Button15)) {
+            if (isSettingsShowing) {
+                HideSettings();
+            } else {
+                ShowSettings();
+            }
+        }
+        if (isSettingsShowing && Input.GetKeyDown(KeyCode.Joystick1Button14)) {
+            Social.ShowLeaderboardUI();
+        }
+        //ShowSettings();
+        //HideSettings();
+    }
+
     private void ShowSettings() {
         if (GameManager.Instance.IsGameRunning) {
             settingsScreen.SetActive(true);
             GameManager.Instance.SetIsGamePaused(true);
             PostProcessVolume processVolume = Camera.main.GetComponent<PostProcessVolume>();
             processVolume.enabled = true;
+            isSettingsShowing = true;
         }
     }
 
@@ -102,6 +118,7 @@ public class UISettings : MonoBehaviour {
             GameManager.Instance.SetIsGamePaused(false);
             PostProcessVolume processVolume = Camera.main.GetComponent<PostProcessVolume>();
             processVolume.enabled = false;
+            isSettingsShowing = false;
         }
 
     }
