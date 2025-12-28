@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,7 +7,10 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UISettings : MonoBehaviour {
+public class UISettings : MonoBehaviour
+{
+
+    public event EventHandler<bool> OnAssistedModeChanged;
 
     [SerializeField] private Button showSettingsButton;
     [SerializeField] private Button hideSettingsButton;
@@ -22,73 +26,100 @@ public class UISettings : MonoBehaviour {
     [SerializeField] private Sprite speakerOff;
     [SerializeField] private Sprite noteOn;
     [SerializeField] private Sprite noteOff;
+    [SerializeField] private Toggle assistedModeToggle;
     [SerializeField] private TextMeshProUGUI highestScoreText;
-
+    [SerializeField] private MainMenuCanvasManager _mainMenuCanvasManager;
     private float lastGameplayMusicVolume = 0.5f;
     private float lastSFXVolume = 1.0f;
     private bool gameplayMusicPlaying = true;
     private bool sfxPlaying = true;
     private const string url = "https://mergemadness.josipglavas.com/privacy";
 
+    private bool assistedModeOn = true; // shows the next ornament image in the UI
 
-    private void Awake() {
-        showSettingsButton.onClick.AddListener(() => {
+    private void Awake()
+    {
+        showSettingsButton.onClick.AddListener(() =>
+        {
             ShowSettings();
         });
 
-        hideSettingsButton.onClick.AddListener(() => {
+        hideSettingsButton.onClick.AddListener(() =>
+        {
             HideSettings();
         });
 
-        gameplayMusicButton.onClick.AddListener(() => {
-            if (gameplayMusicPlaying && AudioManager.Instance.GetMusicVolume() > 0.0f) {
+        gameplayMusicButton.onClick.AddListener(() =>
+        {
+            if (gameplayMusicPlaying && AudioManager.Instance.GetMusicVolume() > 0.0f)
+            {
                 SetGameplayMusicVolume(0.0f);
                 gameplayMusicPlaying = false;
-            } else {
+            }
+            else
+            {
                 SetGameplayMusicVolume(lastGameplayMusicVolume);
                 gameplayMusicPlaying = true;
             }
         });
 
-        sfxButton.onClick.AddListener(() => {
-            if (sfxPlaying && AudioManager.Instance.GetSFXVolume() > 0.0f) {
+        sfxButton.onClick.AddListener(() =>
+        {
+            if (sfxPlaying && AudioManager.Instance.GetSFXVolume() > 0.0f)
+            {
                 SetSFXVolume(0.0f);
                 sfxPlaying = false;
-            } else {
+            }
+            else
+            {
                 SetSFXVolume(lastSFXVolume);
                 sfxPlaying = true;
             }
         });
 
-        gameplayMusicSlider.onValueChanged.AddListener((float volume) => {
+        gameplayMusicSlider.onValueChanged.AddListener((float volume) =>
+        {
             SetGameplayMusicVolume(volume);
         });
 
-        sfxSlider.onValueChanged.AddListener((float volume) => {
+        sfxSlider.onValueChanged.AddListener((float volume) =>
+        {
             SetSFXVolume(volume);
         });
 
-        privacyPolicyButton.onClick.AddListener(() => {
+        privacyPolicyButton.onClick.AddListener(() =>
+        {
             ShowPrivacyPolicy();
+        });
+
+
+        assistedModeToggle.onValueChanged.AddListener((bool isOn) =>
+        {
+            SetAssistedMode(isOn);
         });
 
         GameManager.Instance.OnIsGameRunningChanged += GameManager_OnIsGameRunningChanged;
     }
 
-    private void GameManager_OnIsGameRunningChanged(object sender, System.EventArgs e) {
+    private void GameManager_OnIsGameRunningChanged(object sender, System.EventArgs e)
+    {
         showSettingsButton.interactable = false;
     }
 
-    private void Start() {
+    private void Start()
+    {
         HideSettings();
         SetSFXVolume(FileManager.Instance.SfxVolume, false);
         SetGameplayMusicVolume(FileManager.Instance.MusicVolume, false);
+        GetAssistedMode();
 
         highestScoreText.text = FileManager.Instance.Score.ToString();
     }
 
-    private void ShowSettings() {
-        if (GameManager.Instance.IsGameRunning) {
+    private void ShowSettings()
+    {
+        if (GameManager.Instance.IsGameRunning)
+        {
             settingsScreen.SetActive(true);
             GameManager.Instance.SetIsGamePaused(true);
             PostProcessVolume processVolume = Camera.main.GetComponent<PostProcessVolume>();
@@ -96,22 +127,44 @@ public class UISettings : MonoBehaviour {
         }
     }
 
-    public void HideSettings() {
-        if (GameManager.Instance.IsGameRunning) {
+    public void HideSettings()
+    {
+        if (GameManager.Instance.IsGameRunning)
+        {
             settingsScreen.SetActive(false);
-            GameManager.Instance.SetIsGamePaused(false);
+            if (!_mainMenuCanvasManager.IsShowingMainMenu)
+            {
+                GameManager.Instance.SetIsGamePaused(false);
+            }
             PostProcessVolume processVolume = Camera.main.GetComponent<PostProcessVolume>();
             processVolume.enabled = false;
         }
 
     }
 
-    private void SetGameplayMusicVolume(float volume, bool save = true) {
+    private void GetAssistedMode()
+    {
+        assistedModeOn = FileManager.Instance.AssistedMode;
+        assistedModeToggle.isOn = assistedModeOn;
+    }
+
+    private void SetAssistedMode(bool isOn)
+    {
+        assistedModeOn = isOn;
+        FileManager.Instance.SetAssistedMode(isOn);
+        OnAssistedModeChanged?.Invoke(this, isOn);
+    }
+
+    private void SetGameplayMusicVolume(float volume, bool save = true)
+    {
         AudioManager.Instance.SetGameplayMusicVolume(volume);
         gameplayMusicSlider.value = volume;
-        if (volume == 0.0f) {
+        if (volume == 0.0f)
+        {
             gameplayMusicSpeakerImage.sprite = noteOff;
-        } else {
+        }
+        else
+        {
             gameplayMusicSpeakerImage.sprite = noteOn;
             lastGameplayMusicVolume = volume;
         }
@@ -119,12 +172,16 @@ public class UISettings : MonoBehaviour {
             FileManager.Instance.SetMusicVolume(volume);
     }
 
-    private void SetSFXVolume(float volume, bool save = true) {
+    private void SetSFXVolume(float volume, bool save = true)
+    {
         AudioManager.Instance.SetSFXVolume(volume);
         sfxSlider.value = volume;
-        if (volume == 0.0f) {
+        if (volume == 0.0f)
+        {
             sfxSpeakerImage.sprite = speakerOff;
-        } else {
+        }
+        else
+        {
             sfxSpeakerImage.sprite = speakerOn;
             lastSFXVolume = volume;
         }
@@ -132,7 +189,13 @@ public class UISettings : MonoBehaviour {
             FileManager.Instance.SetSfxVolume(volume);
     }
 
-    private void ShowPrivacyPolicy() {
+    private void ShowPrivacyPolicy()
+    {
         Application.OpenURL(url);
+    }
+
+    public bool IsAssistedModeOn()
+    {
+        return assistedModeOn;
     }
 }

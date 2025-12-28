@@ -39,6 +39,11 @@ public class AudioManager : MonoBehaviour {
         gameplaySource.Stop();
     }
 
+    public void StartGamePlayMusic()
+    {
+        gameplaySource.Play();
+    }
+
     public void SetGameplayMusicVolume(float volume) {
         gameplaySource.volume = volume * 0.35f; // we are multiplying by 0.35f because we dont want the sound to be too loud.
     }

@@ -1,0 +1,5 @@
+/Users/josipglavas/Documents/Dev/Merge-Madness/.utmp/RelWithDebInfo/2t4c6z20/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/josipglavas/Documents/Dev/Merge-Madness/.utmp/RelWithDebInfo/2t4c6z20/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/josipglavas/Documents/Dev/Merge-Madness/.utmp/RelWithDebInfo/2t4c6z20/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+/Users/josipglavas/Documents/Dev/Merge-Madness/.utmp/RelWithDebInfo/2t4c6z20/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+/Users/josipglavas/Documents/Dev/Merge-Madness/.utmp/RelWithDebInfo/2t4c6z20/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir
